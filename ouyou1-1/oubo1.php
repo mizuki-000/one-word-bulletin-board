@@ -1,22 +1,32 @@
-
 <?php
+    $error_message = [];
+    session_start();
+    if (isset($_POST['btn'])) {
+        if (empty($_POST['id'])) {
+            $error_message["name"] = "値が空です";
+        } elseif (strlen($_POST['id']) > 20) {
+            $error_message["name"] = "文字数がオーバーしています";
+        }
+    
+        if (empty($error_message)) {
+            $_SESSION["name"] = $_POST["id"];
+            header("Location: oubo2.php");
+            exit(0);
+        }
+    }
+    if(strlen($_POST['btn'])) {
+        if(empty($_POST['kana'])) {
+            $error_massage["kana"] = "文字数がオーバーしています";
+        }
 
-    $sql=null;
+        if (empty($error_message)) {
+            $_SESSION["kana"] = $_POST["kana"];
+            header("Location: oubo2.php");
+            exit(0);
+        }
+    }
 
-    $dbn = null;
-    $
-
-    $dbn = new PDO(
-        'mysql:host=localhost;
-        dbname=techis;
-        charset=utf8',
-        'root',
-        'root'
-    );
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -35,12 +45,16 @@
             <div class="title">
                 <h1>会員登録フォーム</h1>
             </div>
-
-            <form method="POST" action="oubo2.php">
+            <div>
+                <h2>入力画面</h2>
+            </div>
+            <form method="POST" action="">
                 <div>
                     <p>
                         <label>名前</label>
                         <input type="text" id="id" name="id">
+                        <?php if(isset($error_message["name"])): ?>
+                            <?php echo $error_message["name"]; ?>
                     </p>
                 </div>
 
@@ -48,6 +62,9 @@
                     <p>
                         <label>カナ</label>
                         <input type="text" id="kana" name="kana">
+                        <?php if(isset($error_massage["kana"])); ?>
+                            <?php echo $error_massage["kana"] ?>
+                        <?php endif; ?>
                     </p>
                 </div>
 
@@ -67,62 +84,32 @@
 
                 <div>
                     <p>
-                        <select name="生まれ年">
-                            <option value="80">1980年</option>
-                            <option value="81">1981年</option>
-                            <option value="82">1982年</option>
-                            <option value="83">1983年</option>
-                            <option value="84">1984年</option>
-                            <option value="85">1985年</option>
-                            <option value="86">1986年</option>
-                            <option value="87">1987年</option>
-                            <option value="88">1988年</option>
-                            <option value="89">1989年</option>
-                            <option value="90">1990年</option>
-                            <option value="91">1991年</option>
-                            <option value="92">1992年</option>
-                            <option value="93">1993年</option>
-                            <option value="94">1994年</option>
-                            <option value="95">1995年</option>
-                            <option value="96">1996年</option>
-                            <option value="97">1997年</option>
-                            <option value="98">1998年</option>
-                            <option value="99">1999年</option>
-                            <option value="00">2000年</option>
-                            <option value="01">2001年</option>
-                            <option value="02">2002年</option>
-                            <option value="03">2003年</option>
-                            <option value="04">2004年</option>
-                            <option value="05">2005年</option>
-                            <option value="06">2006年</option>
-                            <option value="07">2007年</option>
-                            <option value="08">2008年</option>
-                            <option value="09">2009年</option>
-                            <option value="10">2010年</option>
-                            <option value="11">2011年</option>
-                            <option value="10">2012年</option>
+                        <label>生まれ年</label>
+                        <select id="year" name="year">
+                            <?php for($i = 1900; $i <= 2020; $i++): ?>
+                                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                            <?php endfor; ?>
                         </select>
                     </p>
                 </div>
 
                 <div>
                     <p>
-                        <input type="radio" name="gender" value="male">男性
+                        <label>性別</label>
+                        <input type="radio" name="gender" value="male" checked>男性
                         <input type="radio" name="gender" value="fimale">女性
                     </p>
                 </div>
 
                 <div>
                     <p>
-                        <input type="checkbox" name="mail" value="yes">メールマガジン受け取り
+                        <input type="checkbox" name="magazine" value="yes" id="yes">メールマガジン受け取り
                     </p>
                 </div>
 
-                <div>
-                    <p>
-                        <button type="submit">登録</button>
-                    </p>
-                </div>
+            <div>
+                <input type="submit" name="btn" value="送信">
+            </div>
             </form>
 
         </body>
